@@ -1,0 +1,33 @@
+name: "天气预报"
+
+on:
+  push:
+  schedule:
+    # 需要减 8 个小时
+    - cron: "0 23 * * *"
+
+jobs:
+  bot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "切换代码"
+        uses: actions/checkout@v3
+
+      - name: "获取天气结果"
+        run: 'curl -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.88 Safari/537.36" -H "Accept: text/html" -s "https://wttr.in/Guilin" -o result.html'
+
+      - name: "获取时间"
+        run: echo "WEATHER_REPORT_DATE=$(TZ=':Asia/Shanghai' date '+%Y-%m-%d %T')" >> $GITHUB_ENV
+
+      - name: "发送邮件"
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.qq.com
+          server_port: 465
+          username: ${{ secrets.SENDER_USER }}
+          password: ${{ secrets.SENDER_PASSWORD }}
+          subject: 广州天气预报 - ${{env.WEATHER_REPORT_DATE}}
+          body: file://result.html
+          to: fatedeity@qq.com
+          from: GitHub Actions
+          content_type: text/html
