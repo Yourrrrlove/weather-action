@@ -27,7 +27,7 @@ jobs:
           username: ${{ secrets.SENDER_USER }}
           password: ${{ secrets.SENDER_PASSWORD }}
           subject: 广州天气预报 - ${{env.WEATHER_REPORT_DATE}}
-          body: file://result.html
-          to: fatedeity@qq.com
           from: GitHub Actions
+          to: fatedeity@qq.com
+          html_body: file://result.html
           content_type: text/html
