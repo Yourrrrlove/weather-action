@@ -22,7 +22,7 @@ jobs:
       - run: pip install -r requirements.txt
 
       - name: "获取天气结果"
-        run: 'echo "WEATHER_REPORT=$(python open_api/weather.py 广州 桂林)" >> $GITHUB_ENV'
+        run: 'echo "$(python open_api/weather.py 广州 桂林)" > output.txt'
 
       - name: "发送邮件"
         uses: dawidd6/action-send-mail@v3
@@ -34,4 +34,4 @@ jobs:
           subject: 天气预报 - ${{env.WEATHER_REPORT_DATE}}
           from: GitHub Actions
           to: fatedeity@qq.com
-          body: ${{env.WEATHER_REPORT}}
+          body: file://output.txt
