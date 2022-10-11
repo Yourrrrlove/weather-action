@@ -13,11 +13,16 @@ jobs:
       - name: "切换代码"
         uses: actions/checkout@v3
 
-      - name: "获取天气结果"
-        run: 'curl -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.88 Safari/537.36" -H "Accept: text/html" -s "https://wttr.in/Guilin" -o result.html'
-
       - name: "获取时间"
         run: echo "WEATHER_REPORT_DATE=$(TZ=':Asia/Shanghai' date '+%Y-%m-%d %T')" >> $GITHUB_ENV
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+      - run: pip install -r requirements.txt
+
+      - name: "获取天气结果"
+        run: 'echo "WEATHER_REPORT=$(python open_api/weather.py 广州 桂林)" >> $GITHUB_ENV'
 
       - name: "发送邮件"
         uses: dawidd6/action-send-mail@v3
@@ -26,8 +31,7 @@ jobs:
           server_port: 465
           username: ${{ secrets.SENDER_USER }}
           password: ${{ secrets.SENDER_PASSWORD }}
-          subject: 广州天气预报 - ${{env.WEATHER_REPORT_DATE}}
+          subject: 天气预报 - ${{env.WEATHER_REPORT_DATE}}
           from: GitHub Actions
           to: fatedeity@qq.com
-          html_body: file://result.html
-          content_type: text/html
+          body: ${{env.WEATHER_REPORT}}
