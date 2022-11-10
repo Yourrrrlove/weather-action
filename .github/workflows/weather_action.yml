@@ -4,7 +4,7 @@ on:
   push:
   schedule:
     # 需要减 8 个小时
-    - cron: "0 23 * * *"
+    - cron: "45 22 * * *"
 
 jobs:
   bot:
