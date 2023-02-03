@@ -1,4 +1,4 @@
-# 通过 Github Action 实现定时推送天气预报
+# 通过 Github Action 实现定时推送天气预报 
 
 > 跳转 [我的博客](https://fatedeity.cn/posts/z-turn/github-action-weather-push.html) 可以查看原文。
 
